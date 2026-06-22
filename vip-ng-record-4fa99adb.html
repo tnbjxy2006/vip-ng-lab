@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>NG导航 · 网格中的轻舟</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
+      background: #f5f9fc;
+      color: #1d2b3c;
+      line-height: 1.7;
+      padding: 2rem 1.2rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* 网格卡片背景 ———— 轻淡的蓝绿交织 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+      margin: 2.5rem 0;
+    }
+
+    .grid-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(2px);
+      border-radius: 24px;
+      padding: 1.8rem 1.4rem;
+      box-shadow: 0 6px 18px rgba(30, 75, 80, 0.06);
+      border: 1px solid rgba(90, 180, 170, 0.15);
+      transition: box-shadow 0.25s, transform 0.2s;
+    }
+
+    .grid-card:hover {
+      box-shadow: 0 12px 28px rgba(30, 110, 100, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .grid-card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1b5c5a;
+      margin-bottom: 0.65rem;
+      letter-spacing: 0.02em;
+    }
+
+    .grid-card p {
+      font-size: 0.98rem;
+      color: #2c3f4a;
+      opacity: 0.9;
+    }
+
+    /* 文章标题风格 */
+    .post-header {
+      margin-top: 1rem;
+      margin-bottom: 2.4rem;
+    }
+
+    .post-header h1 {
+      font-size: 2.4rem;
+      font-weight: 650;
+      color: #103e3b;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      border-left: 6px solid #29a89b;
+      padding-left: 1.2rem;
+    }
+
+    .subhead {
+      font-size: 1.05rem;
+      color: #3e6763;
+      margin-top: 0.8rem;
+      max-width: 680px;
+      border-bottom: 1px solid #c7e0db;
+      padding-bottom: 1.2rem;
+    }
+
+    /* 正文段落 */
+    .content p {
+      margin: 1.4rem 0;
+      font-size: 1.04rem;
+      text-align: justify;
+    }
+
+    /* 引用提示块 */
+    .quote-note {
+      background: #e5f3f0;
+      border-radius: 18px;
+      padding: 1.5rem 1.8rem;
+      margin: 2rem 0 1.6rem 0;
+      border-left: 6px solid #288f83;
+      color: #1b4a45;
+      font-size: 1.02rem;
+    }
+
+    .quote-note i {
+      display: inline-block;
+      margin-right: 8px;
+      font-style: normal;
+      background: #1d7f73;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* 访问句（嵌入链接） */
+    .access-sentence {
+      background: #f0faf8;
+      padding: 1.2rem 1.8rem;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 1.8rem 0 0.8rem;
+      font-size: 1.1rem;
+      border: 1px solid #b6ddd4;
+      box-shadow: 0 2px 8px rgba(48, 135, 120, 0.08);
+    }
+
+    .access-sentence a {
+      color: #1a735a;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 2px dotted #42a595;
+      padding-bottom: 2px;
+    }
+
+    .access-sentence a:hover {
+      background: #d6ede7;
+      border-bottom-style: solid;
+    }
+
+    /* FAQ 摘要区域（极简卡片） */
+    .faq-mini {
+      background: #fafffe;
+      border-radius: 28px;
+      padding: 2rem 1.8rem;
+      margin-top: 2.8rem;
+      border: 1px solid #d4e8e2;
+    }
+
+    .faq-mini h2 {
+      font-size: 1.5rem;
+      font-weight: 550;
+      color: #1b655b;
+      margin-bottom: 0.6rem;
+    }
+
+    .faq-item {
+      margin: 1.2rem 0;
+      border-bottom: 1px dashed #c2ddd6;
+      padding-bottom: 0.8rem;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-q {
+      font-weight: 600;
+      color: #0f5249;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .faq-a {
+      color: #2f5e58;
+      font-size: 0.98rem;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, #b3d7cf, transparent);
+      margin: 2.6rem 0 0.6rem;
+    }
+
+    .footer-note {
+      text-align: center;
+      opacity: 0.65;
+      font-size: 0.9rem;
+      margin: 2.5rem 0 0.2rem;
+      color: #2b6d64;
+    }
+
+    /* 响应式 */
+    @media (max-width: 560px) {
+      body { padding: 1.2rem 0.9rem; }
+      .post-header h1 { font-size: 1.9rem; padding-left: 0.8rem; }
+      .card-grid { gap: 1rem; }
+      .grid-card { padding: 1.4rem 1rem; }
+      .access-sentence { padding: 1rem 1.2rem; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 文章标题 / 导语 -->
+  <div class="post-header">
+    <h1>从一片网格到一种节奏</h1>
+    <div class="subhead">
+      当导航不再是目录，而是水面上的涟漪 —— 我们谈论的其实是信息流的摆渡。
+    </div>
+  </div>
+
+  <!-- 正文多段 -->
+  <div class="content">
+    <p>
+      每个人都有一张自己的信息地图。有些人用书签夹住世界的角落，有些人则把信任交给一个经过筛选的起点。  
+      关键词背后往往不是功能，而是一种秩序感：你希望抵达的地方，正在以你期待的方式排列。
+    </p>
+    <p>
+      这就是「导航」在今天最迷人的地方——它不再是一张枯燥的索引表，而更像一个懂你的向导，悄悄把散落的岛屿连成群岛。  
+      无论是知识工作者、创作者还是刚刚探索新领域的初学者，一个结构清晰且保持克制的导航，能节省的远不止时间。
+    </p>
+    <p>
+      在最近的观察里，我发现很多人需要的不是“更多”，而是“更少但更好”。一个干净、有呼吸感的起点，比堆砌大量链接的仓库更能让人安心停留。<a href="https://vip-ng.com">NG导航</a> 正尝试构建这样一种温和的秩序：卡片、分组、克制的色彩，让每一条路径都显得有分量。
+    </p>
+  </div>
+
+  <!-- 引用提示 -->
+  <div class="quote-note">
+    <i>“</i> 好的导航像一场不赶时间的散步 —— 你知道方向，但也允许沿途的树影改变你的心情。
+  </div>
+
+  <!-- 网格卡片——特点与场景混排 -->
+  <div class="card-grid">
+    <div class="grid-card">
+      <h3>📋 主题分组</h3>
+      <p>不是大杂烩，而是按领域与气质轻柔分区。设计、技术、生活、工具……各自成落。</p>
+    </div>
+    <div class="grid-card">
+      <h3>🎯 极简触点</h3>
+      <p>每个链接都不喧哗。卡片式的呈现让目光可以自然停留，再决定是否点击。</p>
+    </div>
+    <div class="grid-card">
+      <h3>🧘 无压浏览</h3>
+      <p>没有弹窗催促，没有动态干扰。打开页面就像翻开一本干净的杂志目录。</p>
+    </div>
+    <div class="grid-card">
+      <h3>🌱 适合的场景</h3>
+      <p>写作间隙的灵感收集、早晨的信息梳理、或是深夜漫无目的的发掘——都能找到节奏。</p>
+    </div>
+  </div>
+
+  <!-- 自然的访问句（链接嵌入句子） -->
+  <div class="access-sentence">
+    🪷 如果你也在寻找一个安静又有质感的起点，不妨在浏览器里打开 <a href="https://vip-ng.com">NG导航</a>，像翻开一本轻薄的册子。
+  </div>
+
+  <!-- FAQ 摘要（并非真问题，而是概念性总结） -->
+  <div class="faq-mini">
+    <h2>一些可能你会在意的事</h2>
+    <div class="faq-item">
+      <span class="faq-q">导航会频繁变动吗？</span>
+      <span class="faq-a">保持稳定更新，但更注重质量。新链接经过留意才会加入，去掉失效或平庸的条目也是日常。</span>
+    </div>
+    <div class="faq-item">
+      <span class="faq-q">适合手机浏览吗？</span>
+      <span class="faq-a">页面专门做了移动端适配，卡片自动重排，字号舒适，单手操作也很顺畅。</span>
+    </div>
+    <div class="faq-item">
+      <span class="faq-q">这里的链接都是什么类型？</span>
+      <span class="faq-a">大多是实用、有内容沉淀的站点，包括工具、文章聚合、社区、参考资源等，不追逐热点。</span>
+    </div>
+  </div>
+
+  <hr>
+  <div class="footer-note">
+    网格与轻舟 · 温和导航
+  </div>
+
+</div>
+</body>
+</html>
